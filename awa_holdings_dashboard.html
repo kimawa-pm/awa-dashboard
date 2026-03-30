@@ -1,0 +1,406 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans)}
+.dash{padding:0 0 2rem}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-bottom:0.5px solid var(--color-border-tertiary);margin-bottom:20px;gap:12px;flex-wrap:wrap}
+.brand{font-size:15px;font-weight:500;color:var(--color-text-primary)}
+.brand span{font-size:12px;font-weight:400;color:var(--color-text-secondary);margin-left:8px}
+.nav{display:flex;gap:4px;flex-wrap:wrap}
+.nav button{font-size:12px;padding:5px 13px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-secondary);background:transparent;color:var(--color-text-secondary);cursor:pointer;transition:all .15s}
+.nav button.active{background:var(--color-background-info);color:var(--color-text-info);border-color:var(--color-border-info)}
+.kpi-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;padding:0 20px;margin-bottom:20px}
+.kpi{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px 14px}
+.kpi-label{font-size:11px;color:var(--color-text-secondary);margin-bottom:4px}
+.kpi-val{font-size:22px;font-weight:500;color:var(--color-text-primary);line-height:1}
+.kpi-sub{font-size:11px;margin-top:4px}
+.kpi-sub.pos{color:var(--color-text-success)}
+.kpi-sub.neg{color:var(--color-text-danger)}
+.kpi-sub.neu{color:var(--color-text-secondary)}
+.section{padding:0 20px;margin-bottom:24px}
+.section-title{font-size:13px;font-weight:500;color:var(--color-text-secondary);margin-bottom:12px;letter-spacing:.02em;text-transform:uppercase;font-size:11px}
+.chart-wrap{position:relative;width:100%}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:16px;padding:0 20px;margin-bottom:24px}
+@media(max-width:560px){.row2{grid-template-columns:1fr}}
+.card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:14px 16px}
+.card-title{font-size:11px;font-weight:500;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.04em;margin-bottom:12px}
+.table-wrap{overflow-x:auto}
+table{width:100%;font-size:12px;border-collapse:collapse}
+th{text-align:right;color:var(--color-text-secondary);font-weight:400;padding:5px 8px;border-bottom:0.5px solid var(--color-border-tertiary)}
+th:first-child{text-align:left}
+td{text-align:right;padding:5px 8px;color:var(--color-text-primary);border-bottom:0.5px solid var(--color-border-tertiary)}
+td:first-child{text-align:left;color:var(--color-text-secondary)}
+tr:last-child td{border-bottom:none;font-weight:500;color:var(--color-text-primary)}
+tr:last-child td:first-child{color:var(--color-text-primary)}
+.pos-val{color:#1a7a4a}
+.neg-val{color:#b83838}
+.legend{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:8px;font-size:11px;color:var(--color-text-secondary)}
+.legend span{display:flex;align-items:center;gap:4px}
+.lbox{width:10px;height:10px;border-radius:2px;flex-shrink:0}
+.pill{display:inline-block;font-size:10px;padding:2px 8px;border-radius:10px;font-weight:500}
+.pill.pos{background:var(--color-background-success);color:var(--color-text-success)}
+.pill.neg{background:var(--color-background-danger);color:var(--color-text-danger)}
+.waterfall-row{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.wf-label{font-size:11px;color:var(--color-text-secondary);width:120px;flex-shrink:0;text-align:right}
+.wf-bar-wrap{flex:1;position:relative;height:18px}
+.wf-bar{position:absolute;height:100%;border-radius:3px;display:flex;align-items:center;padding:0 5px}
+.wf-val{font-size:10px;font-weight:500;white-space:nowrap;position:absolute;right:-4px;transform:translateX(100%)}
+.page{display:none}.page.active{display:block}
+</style>
+
+<div class="dash">
+  <div class="topbar">
+    <div class="brand">AWA Holdings <span>Dashboard Consolidado USD</span></div>
+    <div class="nav">
+      <button class="active" onclick="showPage('pl')">P&amp;L</button>
+      <button onclick="showPage('bs')">Balance Sheet</button>
+      <button onclick="showPage('trend')">Tendencias</button>
+      <button onclick="showPage('ratios')">Ratios</button>
+    </div>
+  </div>
+
+  <!-- P&L Page -->
+  <div id="page-pl" class="page active">
+    <div class="kpi-row">
+      <div class="kpi"><div class="kpi-label">Revenue FY 2025</div><div class="kpi-val">$1.11M</div><div class="kpi-sub pos">▲ 115.6% vs 2024</div></div>
+      <div class="kpi"><div class="kpi-label">Gross Profit 2025</div><div class="kpi-val">$601K</div><div class="kpi-sub pos">▲ Margen 54.0%</div></div>
+      <div class="kpi"><div class="kpi-label">Net Income 2025</div><div class="kpi-val">$10.8K</div><div class="kpi-sub pos">▲ Primera utilidad</div></div>
+      <div class="kpi"><div class="kpi-label">CAGR Revenue 20-25</div><div class="kpi-val">50.8%</div><div class="kpi-sub neu">6 años de historia</div></div>
+      <div class="kpi"><div class="kpi-label">Mejor margen bruto</div><div class="kpi-val">62.9%</div><div class="kpi-sub neu">FY 2020</div></div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Evolución de Ingresos — 6 años (USD)</div>
+      <div class="legend">
+        <span><span class="lbox" style="background:#185FA5"></span>Revenue total</span>
+        <span><span class="lbox" style="background:#1a7a4a"></span>Gross profit</span>
+        <span><span class="lbox" style="background:#b83838"></span>Net income</span>
+      </div>
+      <div class="chart-wrap" style="height:260px"><canvas id="revChart"></canvas></div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Márgenes históricos (%)</div>
+      <div class="legend">
+        <span><span class="lbox" style="background:#1a7a4a"></span>Margen bruto</span>
+        <span><span class="lbox" style="background:#185FA5"></span>Margen operativo</span>
+        <span><span class="lbox" style="background:#9A3596"></span>Margen neto</span>
+      </div>
+      <div class="chart-wrap" style="height:200px"><canvas id="marginChart"></canvas></div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Tabla resumen P&amp;L (USD)</div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Métrica</th><th>FY 2020</th><th>FY 2021</th><th>FY 2022</th><th>FY 2023</th><th>FY 2024</th><th>FY 2025</th></tr></thead>
+          <tbody>
+            <tr><td>Revenue</td><td>143,579</td><td>193,118</td><td>167,470</td><td>202,540</td><td>516,773</td><td>1,114,234</td></tr>
+            <tr><td>COGS</td><td>53,326</td><td>105,382</td><td>96,686</td><td>98,300</td><td>266,804</td><td>512,811</td></tr>
+            <tr><td>Gross Profit</td><td>90,253</td><td>87,736</td><td>70,784</td><td>104,239</td><td>249,969</td><td>601,424</td></tr>
+            <tr><td>SG&amp;A</td><td>35,832</td><td>41,578</td><td>55,357</td><td>53,612</td><td>171,036</td><td>151,254</td></tr>
+            <tr><td>G&amp;A + D&amp;A</td><td>64,833</td><td>53,866</td><td>60,574</td><td>73,156</td><td>135,564</td><td>239,574</td></tr>
+            <tr><td>Net Income</td>
+              <td class="pos-val">827</td>
+              <td class="neg-val">(6,588)</td>
+              <td class="neg-val">(48,980)</td>
+              <td class="neg-val">(42,844)</td>
+              <td class="neg-val">(35,614)</td>
+              <td class="pos-val">10,804</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Balance Sheet Page -->
+  <div id="page-bs" class="page">
+    <div class="kpi-row">
+      <div class="kpi"><div class="kpi-label">Total Assets 2025</div><div class="kpi-val">$536K</div><div class="kpi-sub neg">▼ 6.5% vs 2024</div></div>
+      <div class="kpi"><div class="kpi-label">Total Liabilities 2025</div><div class="kpi-val">$572K</div><div class="kpi-sub neg">▲ 41.5% vs 2024</div></div>
+      <div class="kpi"><div class="kpi-label">Equity 2025</div><div class="kpi-val">($36K)</div><div class="kpi-sub neg">Déficit patrimonial</div></div>
+      <div class="kpi"><div class="kpi-label">Current Ratio 2024</div><div class="kpi-val">1.83x</div><div class="kpi-sub neu">vs 0.60x en 2025</div></div>
+      <div class="kpi"><div class="kpi-label">Cash 2025</div><div class="kpi-val">$135K</div><div class="kpi-sub pos">▲ vs $89K en 2024</div></div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Estructura: Activos vs Pasivos vs Patrimonio (USD)</div>
+      <div class="legend">
+        <span><span class="lbox" style="background:#185FA5"></span>Total Assets</span>
+        <span><span class="lbox" style="background:#b83838"></span>Total Liabilities</span>
+        <span><span class="lbox" style="background:#1a7a4a"></span>Equity</span>
+      </div>
+      <div class="chart-wrap" style="height:260px"><canvas id="bsChart"></canvas></div>
+    </div>
+
+    <div class="row2">
+      <div class="card">
+        <div class="card-title">Composición de Activos — FY 2024</div>
+        <div class="chart-wrap" style="height:180px"><canvas id="assetPie24"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Composición de Activos — FY 2025</div>
+        <div class="chart-wrap" style="height:180px"><canvas id="assetPie25"></canvas></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Balance Sheet histórico (USD)</div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Métrica</th><th>2020</th><th>2021</th><th>2022</th><th>2023</th><th>2024</th><th>2025</th></tr></thead>
+          <tbody>
+            <tr><td>Total Assets</td><td>223,786</td><td>388,095</td><td>478,231</td><td>424,720</td><td>573,016</td><td>536,042</td></tr>
+            <tr><td>Current Assets</td><td>173,578</td><td>339,851</td><td>437,401</td><td>385,325</td><td>342,670</td><td>343,688</td></tr>
+            <tr><td>Fixed Assets</td><td>50,208</td><td>48,244</td><td>40,830</td><td>39,395</td><td>166,192</td><td>129,000</td></tr>
+            <tr><td>Total Liabilities</td><td>318,155</td><td>318,155</td><td>428,292</td><td>323,237</td><td>404,461</td><td>572,287</td></tr>
+            <tr><td>Current Liabilities</td><td>57,332</td><td>164,295</td><td>221,436</td><td>126,407</td><td>187,543</td><td>572,287</td></tr>
+            <tr><td>Equity (Deficit)</td>
+              <td class="neg-val">(104,066)</td>
+              <td class="neg-val">(84,272)</td>
+              <td class="pos-val">49,939</td>
+              <td class="pos-val">101,483</td>
+              <td class="pos-val">168,556</td>
+              <td class="neg-val">(36,245)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Trends Page -->
+  <div id="page-trend" class="page">
+    <div class="section" style="margin-top:8px">
+      <div class="section-title">Waterfall — Del Revenue al Net Income (FY 2025)</div>
+      <div id="waterfall" style="padding:8px 0 4px"></div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Evolución YoY Revenue (crecimiento %)</div>
+      <div class="legend">
+        <span><span class="lbox" style="background:#185FA5"></span>Crecimiento anual</span>
+      </div>
+      <div class="chart-wrap" style="height:180px"><canvas id="growthChart"></canvas></div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Runway hacia la rentabilidad — Net Income histórico</div>
+      <div class="legend">
+        <span><span class="lbox" style="background:#1a7a4a"></span>Utilidad</span>
+        <span><span class="lbox" style="background:#b83838"></span>Pérdida</span>
+      </div>
+      <div class="chart-wrap" style="height:200px"><canvas id="niChart"></canvas></div>
+    </div>
+  </div>
+
+  <!-- Ratios Page -->
+  <div id="page-ratios" class="page">
+    <div class="kpi-row">
+      <div class="kpi"><div class="kpi-label">Gross Margin 2025</div><div class="kpi-val">54.0%</div><div class="kpi-sub pos">▲ vs 48.4% en 2024</div></div>
+      <div class="kpi"><div class="kpi-label">Op. Margin 2025</div><div class="kpi-val">18.9%</div><div class="kpi-sub pos">▲ vs -11.0% en 2024</div></div>
+      <div class="kpi"><div class="kpi-label">Net Margin 2025</div><div class="kpi-val">1.0%</div><div class="kpi-sub pos">▲ Primera vez positivo</div></div>
+      <div class="kpi"><div class="kpi-label">Current Ratio 2025</div><div class="kpi-val">0.60x</div><div class="kpi-sub neg">▼ Riesgo liquidez</div></div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Evolución de márgenes 2020–2025</div>
+      <div class="legend">
+        <span><span class="lbox" style="background:#1a7a4a"></span>Gross margin</span>
+        <span><span class="lbox" style="background:#185FA5"></span>Operating margin</span>
+        <span><span class="lbox" style="background:#9A3596"></span>Net margin</span>
+      </div>
+      <div class="chart-wrap" style="height:240px"><canvas id="marginChart2"></canvas></div>
+    </div>
+
+    <div class="row2">
+      <div class="card">
+        <div class="card-title">Ratios de liquidez</div>
+        <div class="chart-wrap" style="height:180px"><canvas id="liquidityChart"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Leverage — Deuda / Activos</div>
+        <div class="chart-wrap" style="height:180px"><canvas id="leverageChart"></canvas></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Tabla de ratios histórica</div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Ratio</th><th>2020</th><th>2021</th><th>2022</th><th>2023</th><th>2024</th><th>2025</th></tr></thead>
+          <tbody>
+            <tr><td>Gross Margin</td><td>62.9%</td><td>45.4%</td><td>42.3%</td><td>51.5%</td><td>48.4%</td><td>54.0%</td></tr>
+            <tr><td>Op. Margin</td><td class="neg-val">-7.3%</td><td class="neg-val">-4.0%</td><td class="neg-val">-27.0%</td><td class="neg-val">-11.1%</td><td class="neg-val">-11.0%</td><td class="pos-val">18.9%</td></tr>
+            <tr><td>Net Margin</td><td class="pos-val">0.6%</td><td class="neg-val">-3.4%</td><td class="neg-val">-29.2%</td><td class="neg-val">-21.2%</td><td class="neg-val">-6.9%</td><td class="pos-val">1.0%</td></tr>
+            <tr><td>Current Ratio</td><td>3.03x</td><td>2.07x</td><td>1.97x</td><td>3.05x</td><td>1.83x</td><td>0.60x</td></tr>
+            <tr><td>Liabilities/Assets</td><td>142%</td><td>82%</td><td>90%</td><td>76%</td><td>71%</td><td>107%</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+const YEARS = ['2020','2021','2022','2023','2024','2025'];
+const REV   = [143579,193118,167470,202540,516773,1114234];
+const GP    = [90253,87736,70784,104239,249969,601424];
+const NI    = [827,-6588,-48980,-42844,-35614,10804];
+const GM    = [62.9,45.4,42.3,51.5,48.4,54.0];
+const OM    = [-7.3,-4.0,-27.0,-11.1,-11.0,18.9];
+const NM    = [0.6,-3.4,-29.2,-21.2,-6.9,1.0];
+const TA    = [223786,388095,478231,424720,573016,536042];
+const TL    = [318155,318155,428292,323237,404461,572287];
+const EQ    = [-104066,-84272,49939,101483,168556,-36245];
+const CR    = [3.03,2.07,1.97,3.05,1.83,0.60];
+const LA    = [142,82,90,76,71,107];
+
+const isDark = matchMedia('(prefers-color-scheme: dark)').matches;
+const gridC  = isDark ? 'rgba(255,255,255,0.07)' : 'rgba(0,0,0,0.06)';
+const tickC  = isDark ? '#888' : '#999';
+const defOpts = (stacked=false) => ({
+  responsive:true, maintainAspectRatio:false,
+  plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>{
+    const v=c.raw; return ' '+c.dataset.label+': '+(v<0?'-':'')+Math.abs(v).toLocaleString();
+  }}}},
+  scales:{
+    x:{grid:{color:gridC},ticks:{color:tickC,font:{size:11}}},
+    y:{grid:{color:gridC},ticks:{color:tickC,font:{size:11},callback:v=>v>=1000?'$'+(v/1000).toFixed(0)+'K':v}},
+    ...(stacked?{x:{stacked:true},y:{stacked:true}}:{})
+  }
+});
+
+function pctOpts(){
+  const o=defOpts();
+  o.scales.y.ticks.callback=v=>v+'%';
+  return o;
+}
+
+function showPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  event.target.classList.add('active');
+  if(id==='pl'&&!window._plDone){buildPL();window._plDone=true}
+  if(id==='bs'&&!window._bsDone){buildBS();window._bsDone=true}
+  if(id==='trend'&&!window._trendDone){buildTrend();window._trendDone=true}
+  if(id==='ratios'&&!window._ratioDone){buildRatios();window._ratioDone=true}
+}
+
+function buildPL(){
+  new Chart(document.getElementById('revChart'),{
+    type:'bar',
+    data:{labels:YEARS,datasets:[
+      {label:'Revenue',data:REV,backgroundColor:'rgba(24,95,165,0.8)',order:1},
+      {label:'Gross Profit',data:GP,backgroundColor:'rgba(26,122,74,0.85)',order:1},
+      {label:'Net Income',data:NI.map(v=>v<0?v:v),
+        backgroundColor:NI.map(v=>v>=0?'rgba(26,122,74,0.7)':'rgba(184,56,56,0.7)'),order:1}
+    ]},
+    options:defOpts()
+  });
+  new Chart(document.getElementById('marginChart'),{
+    type:'line',
+    data:{labels:YEARS,datasets:[
+      {label:'Gross margin',data:GM,borderColor:'#1a7a4a',backgroundColor:'rgba(26,122,74,0.08)',fill:true,tension:.35,pointRadius:4},
+      {label:'Operating margin',data:OM,borderColor:'#185FA5',backgroundColor:'rgba(24,95,165,0.06)',fill:true,tension:.35,pointRadius:4},
+      {label:'Net margin',data:NM,borderColor:'#9A3596',backgroundColor:'rgba(154,53,150,0.05)',fill:true,tension:.35,pointRadius:4}
+    ]},
+    options:pctOpts()
+  });
+}
+
+function buildBS(){
+  new Chart(document.getElementById('bsChart'),{
+    type:'bar',
+    data:{labels:YEARS,datasets:[
+      {label:'Total Assets',data:TA,backgroundColor:'rgba(24,95,165,0.8)'},
+      {label:'Total Liabilities',data:TL,backgroundColor:'rgba(184,56,56,0.75)'},
+      {label:'Equity',data:EQ,backgroundColor:EQ.map(v=>v>=0?'rgba(26,122,74,0.8)':'rgba(154,53,150,0.75)')}
+    ]},
+    options:defOpts()
+  });
+
+  const pieOpts={responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{font:{size:10},boxWidth:10,color:tickC}},tooltip:{callbacks:{label:c=>c.label+': $'+c.raw.toLocaleString()}}}};
+  new Chart(document.getElementById('assetPie24'),{type:'doughnut',data:{labels:['Cash','AR','Inventory','Other CA','Fixed','Other'],datasets:[{data:[89170,140837,85359,27304,166192,64155],backgroundColor:['#185FA5','#1a7a4a','#B87D17','#9A3596','#b83838','#888']}]},options:pieOpts});
+  new Chart(document.getElementById('assetPie25'),{type:'doughnut',data:{labels:['Cash','AR','Inventory','Other CA','Fixed','Other'],datasets:[{data:[135411,112656,83761,11859,129000,63355],backgroundColor:['#185FA5','#1a7a4a','#B87D17','#9A3596','#b83838','#888']}]},options:pieOpts});
+}
+
+function buildTrend(){
+  const wfData=[
+    {label:'Revenue',val:1114234,type:'total'},
+    {label:'- COGS',val:-512811,type:'neg'},
+    {label:'Gross Profit',val:601423,type:'sub'},
+    {label:'- SG&A',val:-151254,type:'neg'},
+    {label:'- G&A+D&A',val:-239574,type:'neg'},
+    {label:'Net Op. Inc.',val:210595,type:'sub'},
+    {label:'+/- Other',val:-203202,type:'neg'},
+    {label:'Net Income',val:10804,type:'total'}
+  ];
+  const wfEl=document.getElementById('waterfall');
+  const maxV=Math.max(...wfData.map(d=>Math.abs(d.val)));
+  wfData.forEach(d=>{
+    const pct=Math.abs(d.val)/maxV*100;
+    const offset=d.type==='neg'?((1-pct/100)*50):0;
+    const color=d.type==='total'?'#185FA5':d.val<0?'#b83838':'#1a7a4a';
+    const row=document.createElement('div');
+    row.className='waterfall-row';
+    row.innerHTML=`<div class="wf-label">${d.label}</div>
+      <div class="wf-bar-wrap">
+        <div class="wf-bar" style="left:${d.type==='neg'?(100-pct)+'%':'0%'};width:${pct}%;background:${color}80;border-left:2px solid ${color}">
+          <span class="wf-val" style="color:${color}">${d.val<0?'-':'+'}$${Math.abs(d.val).toLocaleString()}</span>
+        </div>
+      </div>`;
+    wfEl.appendChild(row);
+  });
+
+  const yoy=[null,34.5,-13.3,20.9,155.3,115.6];
+  new Chart(document.getElementById('growthChart'),{
+    type:'bar',
+    data:{labels:YEARS,datasets:[{
+      label:'YoY Growth %',
+      data:yoy,
+      backgroundColor:yoy.map(v=>v===null?'transparent':v>=0?'rgba(26,122,74,0.8)':'rgba(184,56,56,0.7)')
+    }]},
+    options:{...pctOpts(),plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.raw===null?'—':' '+c.raw+'%'}}}}
+  });
+
+  new Chart(document.getElementById('niChart'),{
+    type:'bar',
+    data:{labels:YEARS,datasets:[{
+      label:'Net Income',
+      data:NI,
+      backgroundColor:NI.map(v=>v>=0?'rgba(26,122,74,0.85)':'rgba(184,56,56,0.7)'),
+    }]},
+    options:{...defOpts(),plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>' Net Income: '+(c.raw<0?'-':'+')+'$'+Math.abs(c.raw).toLocaleString()}}}}
+  });
+}
+
+function buildRatios(){
+  new Chart(document.getElementById('marginChart2'),{
+    type:'line',
+    data:{labels:YEARS,datasets:[
+      {label:'Gross margin',data:GM,borderColor:'#1a7a4a',backgroundColor:'rgba(26,122,74,0.07)',fill:true,tension:.35,pointRadius:4,pointBackgroundColor:'#1a7a4a'},
+      {label:'Operating margin',data:OM,borderColor:'#185FA5',backgroundColor:'rgba(24,95,165,0.05)',fill:true,tension:.35,pointRadius:4,pointBackgroundColor:'#185FA5'},
+      {label:'Net margin',data:NM,borderColor:'#9A3596',backgroundColor:'rgba(154,53,150,0.04)',fill:true,tension:.35,pointRadius:4,pointBackgroundColor:'#9A3596'}
+    ]},
+    options:pctOpts()
+  });
+
+  new Chart(document.getElementById('liquidityChart'),{
+    type:'line',
+    data:{labels:YEARS,datasets:[{label:'Current Ratio',data:CR,borderColor:'#185FA5',tension:.35,pointRadius:4,pointBackgroundColor:'#185FA5',fill:false}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>' '+c.raw.toFixed(2)+'x'}}},scales:{x:{grid:{color:gridC},ticks:{color:tickC,font:{size:10}}},y:{grid:{color:gridC},ticks:{color:tickC,font:{size:10},callback:v=>v+'x'}}}}
+  });
+
+  new Chart(document.getElementById('leverageChart'),{
+    type:'bar',
+    data:{labels:YEARS,datasets:[{label:'Liabilities / Assets',data:LA,backgroundColor:LA.map(v=>v>100?'rgba(184,56,56,0.7)':'rgba(24,95,165,0.7)')}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>' '+c.raw+'%'}}},scales:{x:{grid:{color:gridC},ticks:{color:tickC,font:{size:10}}},y:{grid:{color:gridC},ticks:{color:tickC,font:{size:10},callback:v=>v+'%'}}}}
+  });
+}
+
+buildPL();
+</script>
